@@ -11,6 +11,8 @@ public class Group {
     private GeoElement lead;
     private ArrayList<GeoElement> geosGroup = new ArrayList();
     private boolean isFixed;
+    private int orderingMin = Integer.MAX_VALUE;
+    private int orderingMax = 0;
 
     /**
      * Constructor for group
@@ -21,9 +23,29 @@ public class Group {
         for (GeoElement geo : selectedGeos) {
             geosGroup.add(geo);
             geo.setParentGroup(this);
+            updateOrderingRange(geo);
         }
 
         updateLead();
+    }
+
+    private void updateOrderingRange(GeoElement geo) {
+        int ordering = geo.getOrdering();
+        if (ordering < orderingMin) {
+            orderingMin = ordering;
+        }
+
+        if (orderingMax < ordering) {
+            orderingMax = ordering;
+        }
+    }
+
+    public int getOrderingMin() {
+        return orderingMin;
+    }
+
+    public int getOrderingMax() {
+        return orderingMax;
     }
 
     private void updateLead() {

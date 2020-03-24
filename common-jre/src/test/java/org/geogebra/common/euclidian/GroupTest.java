@@ -1,8 +1,6 @@
 package org.geogebra.common.euclidian;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +35,7 @@ public class GroupTest {
 		for (int i = 0; i < count; i++) {
 			GeoPolygon polygon = new GeoPolygon(construction);
 			polygon.setLabel("label" + i);
+			polygon.setOrdering(i + 1);
 			geos.add(polygon);
 		}
 		return geos;
@@ -65,5 +64,15 @@ public class GroupTest {
 		Group group = new Group(geos);
 		List<GeoElement> result = group.getGroupedGeos();
 		assertEquals(geos, result);
+	}
+
+	@Test
+	public void testGroupElementsOrdering() {
+		ArrayList<GeoElement> geos = withGivenNumberOfGeos(10);
+		construction.createGroup(geos);
+		Group group = geos.get(0).getParentGroup();
+		int[] expected = new int[]{1, 10};
+		int[] actual = new int[]{group.getOrderingMin(), group.getOrderingMax()};
+		assertArrayEquals(expected, actual);
 	}
 }
