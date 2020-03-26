@@ -1,5 +1,10 @@
 package org.geogebra.common.euclidian;
 
+import static org.mockito.Mockito.mock;
+
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,11 +13,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Arrays;
-import java.util.Collections;
-
-import static org.mockito.Mockito.mock;
 
 public class LayerManagerTest {
 
@@ -72,7 +72,7 @@ public class LayerManagerTest {
 		}
 	}
 
-	private static GeoElement getDummyGeo() {
+	static GeoElement getDummyGeo() {
 		final int[] ordering = {0};
 
 		GeoElement geo = mock(GeoElement.class);

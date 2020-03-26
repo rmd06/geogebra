@@ -1,12 +1,13 @@
 package org.geogebra.common.euclidian;
 
-import org.geogebra.common.kernel.geos.GeoElement;
-import org.geogebra.common.kernel.geos.GeoLocusStroke;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoLocusStroke;
+import org.geogebra.common.kernel.geos.groups.Group;
 
 public class LayerManager {
 
@@ -117,6 +118,10 @@ public class LayerManager {
 	 * while respecting their relative ordering
 	 */
 	public void moveToFront(List<GeoElement> selection) {
+		if (handleBringToFrontInGroup(selection)) {
+			return;
+		}
+
 		ArrayList<GeoElement> resultingOrder = new ArrayList<>(drawingOrder.size());
 
 		for (GeoElement geo : drawingOrder) {
@@ -129,6 +134,20 @@ public class LayerManager {
 
 		drawingOrder = resultingOrder;
 		updateOrdering();
+	}
+
+	private boolean handleBringToFrontInGroup(List<GeoElement> selection) {
+		if (selection.size() > 1 || selection.get(0).getParentGroup() == null) {
+			return false;
+		}
+
+		GeoElement geoToFront = selection.get(0);
+		Group group = geoToFront.getParentGroup();
+		ArrayList<GeoElement> geos = group.getGroupedGeos();
+		geos.remove(geoToFront);
+		geos.add(geoToFront);
+		updateOrdering(geos, group.getOrderingMin());
+		return true;
 	}
 
 	/**
@@ -136,6 +155,10 @@ public class LayerManager {
 	 * while respecting their relative ordering
 	 */
 	public void moveToBack(List<GeoElement> selection) {
+		if (handleMoveToBackInGroup(selection)) {
+			return;
+		}
+
 		ArrayList<GeoElement> resultingOrder = new ArrayList<>(drawingOrder.size());
 
 		addSorted(resultingOrder, selection);
@@ -150,9 +173,32 @@ public class LayerManager {
 		updateOrdering();
 	}
 
+	private boolean handleMoveToBackInGroup(List<GeoElement> selection) {
+		if (selection.size() > 1 || selection.get(0).getParentGroup() == null) {
+			return false;
+		}
+
+		GeoElement geoToBack = selection.get(0);
+		Group group = geoToBack.getParentGroup();
+
+		ArrayList<GeoElement> original = group.getGroupedGeos();
+		original.remove(geoToBack);
+
+		ArrayList<GeoElement> geos = new ArrayList<>();
+		geos.add(geoToBack);
+		addSorted(geos, original);
+
+		updateOrdering(geos, group.getOrderingMin());
+		return true;
+	}
 	private void updateOrdering() {
-		for (int i = 0; i < drawingOrder.size(); i++) {
-			drawingOrder.get(i).setOrdering(i);
+		updateOrdering(drawingOrder, 0);
+	}
+
+
+	private void updateOrdering(List<GeoElement> geos, int minOrder) {
+		for (int i = 0; i < geos.size(); i++) {
+			geos.get(i).setOrdering(minOrder + i);
 		}
 	}
 
