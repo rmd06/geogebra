@@ -242,7 +242,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		}
 
 		addInlineTextToolbar();
-		addSubmenuItem("ContextMenu.Font", new FontSubMenu((AppW) app, getTextController()));
+		addInlineTextSubmenu();
 		addHyperlinkItems();
 		wrappedPopup.addSeparator();
 
@@ -253,7 +253,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			return;
 		}
 
-		addSubmenuItem("General.Order", new OrderSubMenu(app, geos));
+		newSubMenuItem("General.Order", new OrderSubMenu(app, geos));
 	}
 
 	private static boolean containsMask(Collection<GeoElement> geos) {
@@ -273,10 +273,20 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		wrappedPopup.addItem(toolbar, false);
 	}
 
-	private void addSubmenuItem(String key, AriaMenuBar submenu) {
-		AriaMenuItem item = new AriaMenuItem(app.getLocalization().getMenu(key), false, submenu);
+	private void addInlineTextSubmenu() {
+		AriaMenuItem item = newSubMenuItem("ContextMenu.Font",
+				new FontSubMenu((AppW) app, getTextController()));
 		item.addStyleName("no-image");
 		wrappedPopup.addItem(item);
+	}
+
+	private void addOrderSubmenu() {
+		wrappedPopup.addItem(newSubMenuItem("General.Order",
+				new OrderSubMenu(app, getGeos())));
+	}
+
+	private AriaMenuItem newSubMenuItem(String key, AriaMenuBar submenu) {
+		return new AriaMenuItem(app.getLocalization().getMenu(key), false, submenu);
 	}
 
 	private void addHyperlinkItems() {
@@ -332,9 +342,9 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		addItem("removeLink", addRemoveHyperlinkCommand);
 	}
 
-	private void addGroupItems() {
+	private boolean addGroupItems() {
 		GroupItems items = new GroupItems(app);
-		items.addAvailableItems(wrappedPopup);
+		return items.addAvailableItems(wrappedPopup);
 	}
 
 	private void addPropertiesItem() {
