@@ -55,8 +55,8 @@ public class GroupsLayerTest {
 	private void assertOrderingInGroup(Integer... orders) {
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
 		ArrayList<Integer> actual = new ArrayList<>();
-		for (int i = 0; i < geos.size(); i++) {
-			actual.add(geos.get(i).getOrdering());
+		for (GeoElement geo : geos) {
+			actual.add(geo.getOrdering());
 		}
 		Assert.assertArrayEquals(orders, actual.toArray());
 
