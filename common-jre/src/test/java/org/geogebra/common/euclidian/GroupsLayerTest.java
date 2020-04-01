@@ -1,7 +1,8 @@
 package org.geogebra.common.euclidian;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.geogebra.common.factories.AwtFactoryCommon;
 import org.geogebra.common.jre.headless.AppCommon;
@@ -17,7 +18,7 @@ import org.junit.Test;
 public class GroupsLayerTest {
 
 	private LayerManager layerManager = new LayerManager();
-	private List<GeoElement> allGeos = new ArrayList<>();
+	private Map<String, GeoElement> geoMap = new HashMap<>();
 	private Construction construction;
 	private Group group;
 
@@ -28,9 +29,11 @@ public class GroupsLayerTest {
 		construction = app.getKernel().getConstruction();
 		for (int i = 0; i < 10; i++) {
 			GeoElement geo = createGeo(i + 1);
-			allGeos.add(geo);
+			geoMap.put(geo.getLabelSimple(), geo);
 			layerManager.addGeo(geo);
 		}
+
+		ArrayList<GeoElement> allGeos = new ArrayList<>(geoMap.values());
 
 		group = new Group(new ArrayList<>(allGeos.subList(3, 7)));
 		construction.addGroupToGroupList(group);
@@ -39,17 +42,45 @@ public class GroupsLayerTest {
 	@Test
 	public void testMoveToFrontInGroup() {
 		ArrayList<GeoElement> selection = new ArrayList<>();
-		selection.add(group.getGroupedGeos().get(1));
+		selection.add(geoByLabel("5"));
 		layerManager.moveToFront(selection);
 		assertOrderingInGroup(4, 6, 7, 5);
 	}
 
+	private GeoElement geoByLabel(String label) {
+		return geoMap.get(label);
+	}
+
 	@Test
-	public void testMoveToBackInGroup() {
+	public void testMoveForwardInGroup() {
 		ArrayList<GeoElement> selection = new ArrayList<>();
-		selection.add(group.getGroupedGeos().get(2));
-		layerManager.moveToBack(selection);
-		assertOrderingInGroup(6, 4, 5, 7);
+		selection.add(geoByLabel("4"));
+		layerManager.moveForward(selection);
+		assertOrderingInGroup(5, 4, 6, 7);
+	}
+
+	@Test
+	public void testMoveForwardLastInGroup() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("7"));
+		layerManager.moveForward(selection);
+		assertOrderingInGroup(4, 5, 6, 7);
+	}
+
+	@Test
+	public void testMoveBackwardInGroup() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("6"));
+		layerManager.moveBackward(selection);
+		assertOrderingInGroup(4, 6, 5, 7);
+	}
+
+	@Test
+	public void testMoveBackwardLastInGroup() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("4"));
+		layerManager.moveBackward(selection);
+		assertOrderingInGroup(4, 5, 6, 7);
 	}
 
 	private void assertOrderingInGroup(Integer... orders) {
@@ -58,9 +89,9 @@ public class GroupsLayerTest {
 		for (GeoElement geo : geos) {
 			actual.add(Integer.parseInt(geo.getLabelSimple()));
 		}
-		Assert.assertArrayEquals(orders, actual.toArray());
 
-		}
+		Assert.assertArrayEquals(orders, actual.toArray());
+	}
 
 	private GeoElement createGeo(int order) {
 		 GeoElement geo = new GeoPolygon(construction);

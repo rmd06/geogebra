@@ -55,6 +55,10 @@ public class LayerManager {
 	 * one with the highest priority in the selection
 	 */
 	public void moveForward(List<GeoElement> selection) {
+		if (handleMoveForwardInGroup(selection)) {
+			return;
+		}
+
 		ArrayList<GeoElement> resultingOrder = new ArrayList<>(drawingOrder.size());
 		int i = 0;
 		int found = 0;
@@ -85,11 +89,33 @@ public class LayerManager {
 		updateOrdering();
 	}
 
+	private boolean handleMoveForwardInGroup(List<GeoElement> selection) {
+		if (selection.size() > 1 || selection.get(0).getParentGroup() == null) {
+			return false;
+		}
+
+		GeoElement geoForward = selection.get(0);
+		Group group = geoForward.getParentGroup();
+		ArrayList<GeoElement> geos = group.getGroupedGeos();
+		int index = geos.indexOf(geoForward);
+		if (index < group.getGroupedGeos().size() - 1) {
+			geos.remove(geoForward);
+			geos.add(index + 1, geoForward);
+		}
+
+		updateOrdering(geos, group.getOrderingMin());
+		return true;
+	}
+
 	/**
 	 * Move the selection exactly one step behind the one with the
 	 * lowest priority in the selection
 	 */
 	public void moveBackward(List<GeoElement> selection) {
+		if (handleMoveBackwardInGroup(selection)) {
+			return;
+		}
+
 		ArrayList<GeoElement> resultingOrder = new ArrayList<>(drawingOrder.size());
 		int i = 0;
 
@@ -111,6 +137,24 @@ public class LayerManager {
 
 		drawingOrder = resultingOrder;
 		updateOrdering();
+	}
+
+	private boolean handleMoveBackwardInGroup(List<GeoElement> selection) {
+		if (selection.size() > 1 || selection.get(0).getParentGroup() == null) {
+			return false;
+		}
+
+		GeoElement geoBackward = selection.get(0);
+		Group group = geoBackward.getParentGroup();
+		ArrayList<GeoElement> geos = group.getGroupedGeos();
+		int index = geos.indexOf(geoBackward);
+		if (index > 0) {
+			geos.remove(geoBackward);
+			geos.add(index - 1, geoBackward);
+		}
+
+		updateOrdering(geos, group.getOrderingMin());
+		return true;
 	}
 
 	/**
