@@ -181,13 +181,9 @@ public class LayerManager {
 		GeoElement geoToBack = selection.get(0);
 		Group group = geoToBack.getParentGroup();
 
-		ArrayList<GeoElement> original = group.getGroupedGeos();
-		original.remove(geoToBack);
-
-		ArrayList<GeoElement> geos = new ArrayList<>();
-		geos.add(geoToBack);
-		addSorted(geos, original);
-
+		ArrayList<GeoElement> geos = group.getGroupedGeos();
+		geos.remove(geoToBack);
+		geos.add(0, geoToBack);
 		updateOrdering(geos, group.getOrderingMin());
 		return true;
 	}

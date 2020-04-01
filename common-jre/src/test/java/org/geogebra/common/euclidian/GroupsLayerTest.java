@@ -49,7 +49,7 @@ public class GroupsLayerTest {
 		ArrayList<GeoElement> selection = new ArrayList<>();
 		selection.add(group.getGroupedGeos().get(2));
 		layerManager.moveToBack(selection);
-		assertOrderingInGroup(6, 3, 4, 5);
+		assertOrderingInGroup(6, 4, 5, 7);
 	}
 
 	private void assertOrderingInGroup(Integer... orders) {
