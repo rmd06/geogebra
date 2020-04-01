@@ -27,7 +27,7 @@ public class GroupsLayerTest {
 		AppCommon app = new AppCommon(new LocalizationCommon(2), factoryCommon);
 		construction = app.getKernel().getConstruction();
 		for (int i = 0; i < 10; i++) {
-			GeoElement geo = createGeo(i);
+			GeoElement geo = createGeo(i + 1);
 			allGeos.add(geo);
 			layerManager.addGeo(geo);
 		}
@@ -41,7 +41,7 @@ public class GroupsLayerTest {
 		ArrayList<GeoElement> selection = new ArrayList<>();
 		selection.add(group.getGroupedGeos().get(1));
 		layerManager.moveToFront(selection);
-		assertOrderingInGroup(3, 5, 6, 4);
+		assertOrderingInGroup(4, 6, 7, 5);
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class GroupsLayerTest {
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
 		ArrayList<Integer> actual = new ArrayList<>();
 		for (GeoElement geo : geos) {
-			actual.add(geo.getOrdering());
+			actual.add(Integer.parseInt(geo.getLabelSimple()));
 		}
 		Assert.assertArrayEquals(orders, actual.toArray());
 
