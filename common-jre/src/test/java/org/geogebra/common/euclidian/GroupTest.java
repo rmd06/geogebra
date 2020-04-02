@@ -75,4 +75,14 @@ public class GroupTest {
 		int[] actual = new int[]{group.getOrderingMin(), group.getOrderingMax()};
 		assertArrayEquals(expected, actual);
 	}
+
+	@Test
+	public void testRemoveGeoRemovesGroup() {
+		ArrayList<GeoElement> geos1 = withGivenNumberOfGeos(2);
+		ArrayList<GeoElement> geos2 = withGivenNumberOfGeos(2);
+		construction.createGroup(geos1);
+		construction.createGroup(geos2);
+		geos1.get(0).remove();
+		assertEquals(1, construction.getGroups().size());
+	}
 }
