@@ -7,11 +7,16 @@ import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoLocusStroke;
+import org.geogebra.common.util.CopyPaste;
+
+import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoLocusStroke;
 import org.geogebra.common.kernel.geos.groups.Group;
 
 public class LayerManager {
 
 	private List<GeoElement> drawingOrder = new ArrayList<>();
+	private boolean renaming = false;
 
 	private int getNextOrder() {
 		return drawingOrder.size();
@@ -21,6 +26,9 @@ public class LayerManager {
 	 * Add geo on the last position and set its ordering
 	 */
 	public void addGeo(GeoElement geo) {
+		if (renaming) {
+			return;
+		}
 		if (geo instanceof GeoLocusStroke) {
 			GeoLocusStroke stroke = (GeoLocusStroke) geo;
 			if (stroke.getSplitParentLabel() != null) {
@@ -42,6 +50,9 @@ public class LayerManager {
 	 * Remove the geo and update the ordering of all other elements
 	 */
 	public void removeGeo(GeoElement geo) {
+		if (renaming) {
+			return;
+		}
 		drawingOrder.remove(geo);
 		updateOrdering();
 	}
@@ -244,12 +255,38 @@ public class LayerManager {
 
 	private void addSorted(List<GeoElement> to, List<GeoElement> from) {
 		List<GeoElement> copy = new ArrayList<>(from);
+		sortByOrder(copy);
+		to.addAll(copy);
+	}
+
+	private void sortByOrder(List<GeoElement> copy) {
 		Collections.sort(copy, new Comparator<GeoElement>() {
 			@Override
 			public int compare(GeoElement a, GeoElement b) {
+				if (isPasted(a) && !isPasted(b)) {
+					return 1;
+				}
+				if (isPasted(b) && !isPasted(a)) {
+					return -1;
+				}
 				return a.getOrdering() - b.getOrdering();
 			}
 		});
-		to.addAll(copy);
+	}
+
+	private boolean isPasted(GeoElement a) {
+		return a.getLabelSimple() != null && a.getLabelSimple().startsWith(CopyPaste.labelPrefix);
+	}
+
+	/**
+	 * Update the list from geos
+	 */
+	public void updateList() {
+		sortByOrder(drawingOrder);
+		updateOrdering(); // remove potential gaps
+	}
+
+	public void setRenameRunning(boolean renaming) {
+		this.renaming = renaming;
 	}
 }
