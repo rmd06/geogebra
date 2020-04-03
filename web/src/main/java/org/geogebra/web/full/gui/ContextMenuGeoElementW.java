@@ -263,11 +263,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		return false;
 	}
 
-	private void addOrderSubmenu() {
-		wrappedPopup.addItem(newSubMenuItem("General.Order",
-				new OrderSubMenu(app, getGeos(), factory)));
-	}
-
 	private AriaMenuItem newSubMenuItem(String key, AriaMenuBar submenu) {
 		return factory.newAriaMenuItem(app.getLocalization().getMenu(key), false, submenu);
 	}

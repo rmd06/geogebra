@@ -7,11 +7,8 @@ import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoLocusStroke;
-import org.geogebra.common.util.CopyPaste;
-
-import org.geogebra.common.kernel.geos.GeoElement;
-import org.geogebra.common.kernel.geos.GeoLocusStroke;
 import org.geogebra.common.kernel.geos.groups.Group;
+import org.geogebra.common.util.CopyPaste;
 
 public class LayerManager {
 
@@ -245,7 +242,6 @@ public class LayerManager {
 	private void updateOrdering() {
 		updateOrdering(drawingOrder, 0);
 	}
-
 
 	private void updateOrdering(List<GeoElement> geos, int minOrder) {
 		for (int i = 0; i < geos.size(); i++) {
