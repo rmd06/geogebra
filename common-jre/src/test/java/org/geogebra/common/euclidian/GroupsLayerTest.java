@@ -95,7 +95,7 @@ public class GroupsLayerTest {
 
 	private GeoElement createGeo(int order) {
 		 GeoElement geo = new GeoPolygon(construction);
-		 geo.setLabel(order +"");
+		 geo.setLabel(Integer.toString(order));
 		 geo.setOrdering(order);
 		 return geo;
 	}

@@ -197,6 +197,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			addCutCopyPaste();
 			addGroupItems();
 			addLayerItem(getGeos());
+			wrappedPopup.addSeparator();
 			addFixForUnbundledOrNotes();
 		}
 
@@ -250,7 +251,6 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 		wrappedPopup.addItem(newSubMenuItem("General.Order",
 				new OrderSubMenu(app, geos, factory)));
-		wrappedPopup.addSeparator();
 	}
 
 	private static boolean containsMask(Collection<GeoElement> geos) {
