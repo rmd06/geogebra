@@ -178,6 +178,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 	private void addItemsForFocusedInGroup() {
 		ArrayList<GeoElement> geos = new ArrayList<>();
 		geos.add(getFocusedGroupElement());
+		addInlineTextItems(geos);
 		addLayerItem(geos);
 	}
 
@@ -192,7 +193,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			addPinForUnbundled();
 			addFixForUnbundledOrNotes();
 		} else if (app.isWhiteboardActive()) {
-			addInlineTextItems();
+			addInlineTextItems(getGeos());
 			addCutCopyPaste();
 			addGroupItems();
 			addLayerItem(getGeos());
@@ -232,8 +233,8 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 		addPropertiesItem();
 	}
 
-	private void addInlineTextItems() {
-		InlineTextItems items = new InlineTextItems(app, getGeos(), wrappedPopup, factory);
+	private void addInlineTextItems(ArrayList<GeoElement> geos) {
+		InlineTextItems items = new InlineTextItems(app, geos, wrappedPopup, factory);
 		if (items.isEmpty()) {
 			return;
 		}
@@ -247,7 +248,9 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 			return;
 		}
 
-		newSubMenuItem("General.Order", new OrderSubMenu(app, geos));
+		wrappedPopup.addItem(newSubMenuItem("General.Order",
+				new OrderSubMenu(app, geos, factory)));
+		wrappedPopup.addSeparator();
 	}
 
 	private static boolean containsMask(Collection<GeoElement> geos) {
@@ -262,7 +265,7 @@ public class ContextMenuGeoElementW extends ContextMenuGeoElement
 
 	private void addOrderSubmenu() {
 		wrappedPopup.addItem(newSubMenuItem("General.Order",
-				new OrderSubMenu(app, getGeos())));
+				new OrderSubMenu(app, getGeos(), factory)));
 	}
 
 	private AriaMenuItem newSubMenuItem(String key, AriaMenuBar submenu) {
