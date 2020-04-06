@@ -239,6 +239,7 @@ public class LayerManager {
 		updateOrdering(geos, group.getOrderingMin());
 		return true;
 	}
+
 	private void updateOrdering() {
 		updateOrdering(drawingOrder, 0);
 	}
