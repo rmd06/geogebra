@@ -131,6 +131,24 @@ public class InlineTextItemsTest {
 		assertEquals(expected, getMenuEntriesFor(geos));
 	}
 
+	@Test
+	public void testMaskContextMenu() {
+		ArrayList<GeoElement> geos = new ArrayList<>();
+		geos.add(createMask());
+		List<String> expected = Arrays.asList(
+				"Cut", "Copy", "Paste", "SEPARATOR",
+				"FixObject", "Settings"
+		);
+
+		assertEquals(expected, getMenuEntriesFor(geos));
+	}
+
+	private GeoElement createMask() {
+		GeoPolygon polygon = (GeoPolygon) createPolygon("mask1");
+		polygon.setIsMask(true);
+		return polygon;
+	}
+
 	private GeoElement createPolygon(String label) {
 		GeoPolygon poly = new GeoPolygon(construction);
 		poly.setLabel(label);
