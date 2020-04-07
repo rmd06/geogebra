@@ -113,7 +113,7 @@ public class LayerManager {
 			Collections.swap(geos, index, index + 1);
 		}
 
-		updateOrdering(geos, group.getOrderingMin());
+		updateOrdering(geos, group.getMinOrder());
 	}
 
 
@@ -161,7 +161,7 @@ public class LayerManager {
 			Collections.swap(geos, index, index - 1);
 		}
 
-		updateOrdering(geos, group.getOrderingMin());
+		updateOrdering(geos, group.getMinOrder());
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class LayerManager {
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
 		geos.remove(geo);
 		geos.add(geo);
-		updateOrdering(geos, group.getOrderingMin());
+		updateOrdering(geos, group.getMinOrder());
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class LayerManager {
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
 		geos.remove(geo);
 		geos.add(0, geo);
-		updateOrdering(geos, group.getOrderingMin());
+		updateOrdering(geos, group.getMinOrder());
 	}
 
 	private void updateOrdering() {

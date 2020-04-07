@@ -1,6 +1,8 @@
 package org.geogebra.common.kernel.geos.groups;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.geogebra.common.kernel.geos.GeoElement;
 
@@ -9,10 +11,18 @@ import org.geogebra.common.kernel.geos.GeoElement;
  */
 public class Group {
     private GeoElement lead;
-    private ArrayList<GeoElement> geosGroup = new ArrayList();
+    private ArrayList<GeoElement> geosGroup = new ArrayList<>();
     private boolean isFixed;
-    private int orderingMin = Integer.MAX_VALUE;
-    private int orderingMax = 0;
+    private OrderComparator orderComparator = new OrderComparator();
+
+    static class OrderComparator implements Comparator<GeoElement> {
+
+        @Override
+        public int compare(GeoElement o1, GeoElement o2) {
+            Integer order1 = o1.getOrdering();
+            return order1.compareTo(o2.getOrdering());
+        }
+    }
 
     /**
      * Constructor for group
@@ -23,29 +33,19 @@ public class Group {
         for (GeoElement geo : selectedGeos) {
             geosGroup.add(geo);
             geo.setParentGroup(this);
-            updateOrderingRange(geo);
         }
 
         updateLead();
     }
 
-    private void updateOrderingRange(GeoElement geo) {
-        int ordering = geo.getOrdering();
-        if (ordering < orderingMin) {
-            orderingMin = ordering;
-        }
-
-        if (orderingMax < ordering) {
-            orderingMax = ordering;
-        }
+    public int getMinOrder() {
+        GeoElement geo = Collections.min(geosGroup, orderComparator);
+        return geo.getOrdering();
     }
 
-    public int getOrderingMin() {
-        return orderingMin;
-    }
-
-    public int getOrderingMax() {
-        return orderingMax;
+    public int getMaxOrder() {
+        GeoElement geo = Collections.max(geosGroup, orderComparator);
+        return geo.getOrdering();
     }
 
     private void updateLead() {

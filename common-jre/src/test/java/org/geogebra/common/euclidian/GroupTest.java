@@ -84,7 +84,7 @@ public class GroupTest {
 		construction.createGroup(geos);
 		Group group = geos.get(0).getParentGroup();
 		int[] expected = new int[]{1, 10};
-		int[] actual = new int[]{group.getOrderingMin(), group.getOrderingMax()};
+		int[] actual = new int[]{group.getMinOrder(), group.getMaxOrder()};
 		assertArrayEquals(expected, actual);
 	}
 
