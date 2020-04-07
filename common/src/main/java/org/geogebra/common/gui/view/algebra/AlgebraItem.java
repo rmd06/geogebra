@@ -230,8 +230,7 @@ public class AlgebraItem {
 	 */
 	public static String getOutputTextForGeoElement(GeoElement element) {
 		String outputText = "";
-		if (element.isLaTeXDrawableGeo()
-				|| AlgebraItem.isGeoFraction(element)) {
+		if (element.isLaTeXDrawableGeo()) {
 			outputText = element.getLaTeXDescriptionRHS(true,
 					StringTemplate.latexTemplate);
 		} else {
