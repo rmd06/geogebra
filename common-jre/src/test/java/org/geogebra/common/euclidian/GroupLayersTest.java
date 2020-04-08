@@ -17,7 +17,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GroupsLayerTest {
+public class GroupLayersTest {
 
 	private LayerManager layerManager = new LayerManager();
 	private Map<String, GeoElement> geoMap = new HashMap<>();
@@ -41,8 +41,12 @@ public class GroupsLayerTest {
 		construction.addGroupToGroupList(group);
 	}
 
+	private GeoElement geoByLabel(String label) {
+		return geoMap.get(label);
+	}
+
 	@Test
-	public void testMoveToFrontInGroup() {
+	public void testMoveToFront() {
 		ArrayList<GeoElement> selection = new ArrayList<>();
 		selection.add(geoByLabel("5"));
 		layerManager.moveToFront(selection);
@@ -50,19 +54,32 @@ public class GroupsLayerTest {
 	}
 
 	@Test
-	public void testMoveFirstGeoToFrontInGroup() {
+	public void testMoveFirstToFront() {
 		ArrayList<GeoElement> selection = new ArrayList<>();
 		selection.add(geoByLabel("7"));
 		layerManager.moveToFront(selection);
 		assertOrderingInGroup(4, 5, 6, 7);
 	}
 
-	private GeoElement geoByLabel(String label) {
-		return geoMap.get(label);
+	@Test
+	public void testMoveToBack() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("6"));
+		layerManager.moveToBack(selection);
+		assertOrderingInGroup(6, 4, 5, 7);
 	}
 
 	@Test
-	public void testMoveForwardInGroup() {
+	public void testMoveLastToBack() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("6"));
+		layerManager.moveToBack(selection);
+		assertOrderingInGroup(6, 4, 5, 7);
+	}
+
+
+	@Test
+	public void testMoveForward() {
 		ArrayList<GeoElement> selection = new ArrayList<>();
 		selection.add(geoByLabel("4"));
 		layerManager.moveForward(selection);

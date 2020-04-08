@@ -14,6 +14,7 @@ public class LayerManager {
 
 	private List<GeoElement> drawingOrder = new ArrayList<>();
 	private boolean renaming = false;
+	private LayersForGroup groups = new LayersForGroup(drawingOrder);
 
 	private int getNextOrder() {
 		return drawingOrder.size();
@@ -64,10 +65,11 @@ public class LayerManager {
 	 */
 	public void moveForward(List<GeoElement> selection) {
 		if (isGroupMember(selection)) {
-			moveForwardWithinGroup(selection.get(0));
+			groups.moveForward(selection.get(0));
 		} else {
 			moveForwardSelection(selection);
 		}
+		updateOrdering();
 	}
 
 	private boolean isGroupMember(List<GeoElement> selection) {
@@ -105,16 +107,6 @@ public class LayerManager {
 		updateOrdering();
 	}
 
-	private void moveForwardWithinGroup(GeoElement geo) {
-			Group group = geo.getParentGroup();
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		int index = geos.indexOf(geo);
-		if (index < geos.size() - 1) {
-			Collections.swap(geos, index, index + 1);
-		}
-
-		updateOrdering(geos, group.getMinOrder());
-	}
 
 
 	/**
@@ -170,10 +162,11 @@ public class LayerManager {
 	 */
 	public void moveToFront(List<GeoElement> selection) {
 		if (isGroupMember(selection)) {
-			moveToFrontWithInGroup(selection.get(0));
+			groups.moveToFront(selection.get(0));
 		} else {
 			moveSelectionToFront(selection);
 		}
+		updateOrdering();
 	}
 
 	public void moveSelectionToFront(List<GeoElement> selection) {
@@ -188,26 +181,6 @@ public class LayerManager {
 		addSorted(resultingOrder, selection);
 
 		drawingOrder = resultingOrder;
-		updateOrdering();
-	}
-
-	private void moveToFrontWithInGroup(GeoElement geo) {
-		Group group = geo.getParentGroup();
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		int srcIdx = drawingOrder.indexOf(geo);
-		int destIdx = lastIndexOf(geos);
-		drawingOrder.remove(geo);
-		drawingOrder.add(destIdx, geo);
-		updateOrdering();
-	}
-
-	private int firstIndexOfGroup(ArrayList<GeoElement> geos) {
-		return drawingOrder.indexOf(geos.get(0));
-	}
-
-	private int lastIndexOf(ArrayList<GeoElement> geos) {
-		GeoElement last = geos.get(geos.size() - 1);
-		return drawingOrder.indexOf(last);
 	}
 
 	/**
@@ -216,11 +189,13 @@ public class LayerManager {
 	 */
 	public void moveToBack(List<GeoElement> selection) {
 		if (isGroupMember(selection)) {
-			moveToBackWithinGroup(selection.get(0));
+			groups.moveToBack(selection.get(0));
 		} else {
 			moveSelectionToBack(selection);
 		}
+		updateOrdering();
 	}
+
 	public void moveSelectionToBack(List<GeoElement> selection) {
 		ArrayList<GeoElement> resultingOrder = new ArrayList<>(drawingOrder.size());
 		addSorted(resultingOrder, selection);
@@ -232,7 +207,6 @@ public class LayerManager {
 		}
 
 		drawingOrder = resultingOrder;
-		updateOrdering();
 	}
 
 	private void moveToBackWithinGroup(GeoElement geo) {
