@@ -106,7 +106,7 @@ public class LayerManager {
 	}
 
 	private void moveForwardWithinGroup(GeoElement geo) {
-		Group group = geo.getParentGroup();
+			Group group = geo.getParentGroup();
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
 		int index = geos.indexOf(geo);
 		if (index < geos.size() - 1) {
@@ -194,9 +194,20 @@ public class LayerManager {
 	private void moveToFrontWithInGroup(GeoElement geo) {
 		Group group = geo.getParentGroup();
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		geos.remove(geo);
-		geos.add(geo);
-		updateOrdering(geos, group.getMinOrder());
+		int srcIdx = drawingOrder.indexOf(geo);
+		int destIdx = lastIndexOf(geos);
+		drawingOrder.remove(geo);
+		drawingOrder.add(destIdx, geo);
+		updateOrdering();
+	}
+
+	private int firstIndexOfGroup(ArrayList<GeoElement> geos) {
+		return drawingOrder.indexOf(geos.get(0));
+	}
+
+	private int lastIndexOf(ArrayList<GeoElement> geos) {
+		GeoElement last = geos.get(geos.size() - 1);
+		return drawingOrder.indexOf(last);
 	}
 
 	/**

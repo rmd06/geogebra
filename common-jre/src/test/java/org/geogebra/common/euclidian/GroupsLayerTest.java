@@ -1,6 +1,8 @@
 package org.geogebra.common.euclidian;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +49,14 @@ public class GroupsLayerTest {
 		assertOrderingInGroup(4, 6, 7, 5);
 	}
 
+	@Test
+	public void testMoveFirstGeoToFrontInGroup() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("7"));
+		layerManager.moveToFront(selection);
+		assertOrderingInGroup(4, 5, 6, 7);
+	}
+
 	private GeoElement geoByLabel(String label) {
 		return geoMap.get(label);
 	}
@@ -83,8 +93,17 @@ public class GroupsLayerTest {
 		assertOrderingInGroup(4, 5, 6, 7);
 	}
 
+
 	private void assertOrderingInGroup(Integer... orders) {
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
+		Collections.sort(geos,
+				new Comparator<GeoElement>() {
+					@Override
+					public int compare(GeoElement geo1, GeoElement geo2) {
+						Integer ordering1 = geo1.getOrdering();
+						return ordering1.compareTo(geo2.getOrdering());
+					}
+				});
 		ArrayList<Integer> actual = new ArrayList<>();
 		for (GeoElement geo : geos) {
 			actual.add(Integer.parseInt(geo.getLabelSimple()));
