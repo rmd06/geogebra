@@ -66,4 +66,19 @@ public class LayersForGroup {
 			Collections.swap(drawingOrder, index, index + 1);
 		}
 	}
+
+	/**
+	 * Moves geo one step backward in the drawables
+	 * within its group.
+	 *
+	 * @param geo to move backward.
+	 */
+	void moveBackward(GeoElement geo) {
+		Group group = geo.getParentGroup();
+		ArrayList<GeoElement> geos = group.getGroupedGeos();
+		int index = drawingOrder.indexOf(geo);
+		if (index > 0) {
+			Collections.swap(drawingOrder, index, index - 1);
+		}
+	}
 }

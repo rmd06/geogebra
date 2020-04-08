@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoLocusStroke;
-import org.geogebra.common.kernel.geos.groups.Group;
 import org.geogebra.common.util.CopyPaste;
 
 public class LayerManager {
@@ -115,10 +114,12 @@ public class LayerManager {
 	 */
 	public void moveBackward(List<GeoElement> selection) {
 		if (isGroupMember(selection)) {
-			moveBackwardWithinGroup(selection.get(0));
+			groups.moveBackward(selection.get(0));
 		} else {
 			moveBackwardSelection(selection);
 		}
+
+		updateOrdering();
 	}
 
 	public void moveBackwardSelection(List<GeoElement> selection) {
@@ -143,17 +144,6 @@ public class LayerManager {
 
 		drawingOrder = resultingOrder;
 		updateOrdering();
-	}
-
-	private void moveBackwardWithinGroup(GeoElement geo) {
-		Group group = geo.getParentGroup();
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		int index = geos.indexOf(geo);
-		if (index > 0) {
-			Collections.swap(geos, index, index - 1);
-		}
-
-		updateOrdering(geos, group.getMinOrder());
 	}
 
 	/**
@@ -207,15 +197,6 @@ public class LayerManager {
 		}
 
 		drawingOrder = resultingOrder;
-	}
-
-	private void moveToBackWithinGroup(GeoElement geo) {
-		Group group = geo.getParentGroup();
-
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		geos.remove(geo);
-		geos.add(0, geo);
-		updateOrdering(geos, group.getMinOrder());
 	}
 
 	private void updateOrdering() {
