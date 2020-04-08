@@ -25,17 +25,15 @@ public class LayersForGroup {
 	}
 
 	private void moveTo(GeoElement geo, int index) {
-		int srcIdx = drawingOrder.indexOf(geo);
+		int srcIdx = indexOf(geo);
 		if (srcIdx != index) {
 			drawingOrder.remove(geo);
 			drawingOrder.add(index, geo);
 		}
 	}
 
-	private int lastIndexOf(Group group) {
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		GeoElement last = geos.get(geos.size() - 1);
-		return drawingOrder.indexOf(last);
+	private int indexOf(GeoElement geo) {
+		return drawingOrder.indexOf(geo);
 	}
 
 	/**
@@ -59,12 +57,16 @@ public class LayersForGroup {
 	 * @param geo to move forward.
 	 */
 	void moveForward(GeoElement geo) {
-		Group group = geo.getParentGroup();
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		int index = drawingOrder.indexOf(geo);
-		if (index < lastIndexOf(group)) {
+		int index = indexOf(geo);
+		if (index < lastIndexOf(geo.getParentGroup())) {
 			Collections.swap(drawingOrder, index, index + 1);
 		}
+	}
+
+	private int lastIndexOf(Group group) {
+		ArrayList<GeoElement> geos = group.getGroupedGeos();
+		GeoElement last = geos.get(geos.size() - 1);
+		return drawingOrder.indexOf(last);
 	}
 
 	/**
@@ -74,9 +76,7 @@ public class LayersForGroup {
 	 * @param geo to move backward.
 	 */
 	void moveBackward(GeoElement geo) {
-		Group group = geo.getParentGroup();
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		int index = drawingOrder.indexOf(geo);
+		int index = indexOf(geo);
 		if (index > 0) {
 			Collections.swap(drawingOrder, index, index - 1);
 		}
