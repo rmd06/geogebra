@@ -200,6 +200,7 @@ public class TransformableRectangle {
 
 	/**
 	 * Get the rotatable bounding box that is defined by this rectangle
+	 * @return rotatable bounding box
 	 */
 	public RotatableBoundingBox getBoundingBox() {
 		if (boundingBox == null) {

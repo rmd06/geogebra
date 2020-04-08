@@ -1,6 +1,7 @@
 package org.geogebra.common.kernel.geos;
 
 import org.geogebra.common.awt.GColor;
+import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.geos.GeoAngle.AngleStyle;
 import org.geogebra.common.kernel.kernelND.GeoConicND;
@@ -408,12 +409,14 @@ public class XMLBuilder {
 	 * @param inline inline text or formula
 	 */
 	public static void appendPosition(StringBuilder sb, GeoInline inline) {
-		sb.append("\t<startPoint x=\"");
-		sb.append(inline.getLocation().getX());
-		sb.append("\" y=\"");
-		sb.append(inline.getLocation().getY());
-		sb.append("\"/>\n");
-
+		GPoint2D location = inline.getLocation();
+		if (location != null) {
+			sb.append("\t<startPoint x=\"");
+			sb.append(location.getX());
+			sb.append("\" y=\"");
+			sb.append(location.getY());
+			sb.append("\"/>\n");
+		}
 		sb.append("\t<dimensions width=\"");
 		sb.append(inline.getWidth());
 		sb.append("\" height=\"");
