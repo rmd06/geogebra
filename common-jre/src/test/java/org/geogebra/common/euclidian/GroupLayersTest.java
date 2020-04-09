@@ -1,5 +1,7 @@
 package org.geogebra.common.euclidian;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -168,5 +170,23 @@ public class GroupLayersTest {
 		selection.add(geoByLabel("5"));
 		layerManager.moveToFront(selection);
 		assertOrderingInGroup(6, 4, 7, 5);
+	}
+
+	@Test
+	public void testMoveForwardThroughGroup() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		GeoElement geo = geoByLabel("3");
+		selection.add(geo);
+		layerManager.moveForward(selection);
+		assertEquals(7, geo.getOrdering());
+	}
+
+	@Test
+	public void testMoveBackwardsThroughGroup() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		GeoElement geo = geoByLabel("8");
+		selection.add(geo);
+		layerManager.moveBackward(selection);
+		assertEquals(2, geo.getOrdering());
 	}
 }

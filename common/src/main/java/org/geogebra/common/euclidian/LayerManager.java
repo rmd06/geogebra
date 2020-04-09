@@ -81,16 +81,22 @@ public class LayerManager {
 		int found = 0;
 
 		while (i < drawingOrder.size() && found < selection.size()) {
-			if (selection.contains(drawingOrder.get(i))) {
+			GeoElement geo = drawingOrder.get(i);
+			if (selection.contains(geo)) {
 				found++;
 			} else {
-				resultingOrder.add(drawingOrder.get(i));
+				resultingOrder.add(geo);
 			}
 			i++;
 		}
 
 		// Add one more element to _move forward_
 		if (i < drawingOrder.size()) {
+			GeoElement geo = drawingOrder.get(i);
+			if (geo.hasGroup()) {
+				resultingOrder.addAll(geo.getParentGroup().getGroupedGeos());
+			}
+
 			resultingOrder.add(drawingOrder.get(i));
 			i++;
 		}
@@ -126,7 +132,10 @@ public class LayerManager {
 
 		if (!selection.contains(drawingOrder.get(0))) {
 			while (i < drawingOrder.size() && !selection.contains(drawingOrder.get(i + 1))) {
-				resultingOrder.add(drawingOrder.get(i));
+				GeoElement geo = drawingOrder.get(i);
+				if (!geo.hasGroup()) {
+					resultingOrder.add(drawingOrder.get(i));
+				}
 				i++;
 			}
 		}
