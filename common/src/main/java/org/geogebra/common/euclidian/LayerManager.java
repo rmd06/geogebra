@@ -106,8 +106,6 @@ public class LayerManager {
 		updateOrdering();
 	}
 
-
-
 	/**
 	 * Move the selection exactly one step behind the one with the
 	 * lowest priority in the selection
@@ -200,12 +198,8 @@ public class LayerManager {
 	}
 
 	private void updateOrdering() {
-		updateOrdering(drawingOrder, 0);
-	}
-
-	private void updateOrdering(List<GeoElement> geos, int minOrder) {
-		for (int i = 0; i < geos.size(); i++) {
-			geos.get(i).setOrdering(minOrder + i);
+		for (int i = 0; i < drawingOrder.size(); i++) {
+			drawingOrder.get(i).setOrdering(i);
 		}
 	}
 

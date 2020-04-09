@@ -2,7 +2,6 @@ package org.geogebra.common.euclidian;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +76,6 @@ public class GroupLayersTest {
 		assertOrderingInGroup(6, 4, 5, 7);
 	}
 
-
 	@Test
 	public void testMoveForward() {
 		ArrayList<GeoElement> selection = new ArrayList<>();
@@ -110,17 +108,9 @@ public class GroupLayersTest {
 		assertOrderingInGroup(4, 5, 6, 7);
 	}
 
-
 	private void assertOrderingInGroup(Integer... orders) {
 		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		Collections.sort(geos,
-				new Comparator<GeoElement>() {
-					@Override
-					public int compare(GeoElement geo1, GeoElement geo2) {
-						Integer ordering1 = geo1.getOrdering();
-						return ordering1.compareTo(geo2.getOrdering());
-					}
-				});
+		Collections.sort(geos, LayersForGroup.orderComparator);
 		ArrayList<Integer> actual = new ArrayList<>();
 		for (GeoElement geo : geos) {
 			actual.add(Integer.parseInt(geo.getLabelSimple()));
@@ -134,5 +124,49 @@ public class GroupLayersTest {
 		 geo.setLabel(Integer.toString(order));
 		 geo.setOrdering(order);
 		 return geo;
+	}
+
+	@Test
+	public void testMoveToFrontAndBack() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("4"));
+		layerManager.moveToFront(selection);
+		layerManager.moveToBack(selection);
+		assertOrderingInGroup(4, 5, 6, 7);
+	}
+
+	@Test
+	public void testMoveForwardAndBack() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("4"));
+		layerManager.moveForward(selection);
+		layerManager.moveForward(selection);
+		layerManager.moveForward(selection);
+		layerManager.moveForward(selection);
+		layerManager.moveToBack(selection);
+		assertOrderingInGroup(4, 5, 6, 7);
+	}
+
+	@Test
+	public void testMoveBackwardAndReset() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("6"));
+		layerManager.moveBackward(selection);
+		layerManager.moveBackward(selection);
+		layerManager.moveToFront(selection);
+		layerManager.moveBackward(selection);
+		assertOrderingInGroup(4, 5, 6, 7);
+	}
+
+	@Test
+	public void testMoveForwardAndTop() {
+		ArrayList<GeoElement> selection = new ArrayList<>();
+		selection.add(geoByLabel("4"));
+		layerManager.moveForward(selection);
+		layerManager.moveForward(selection);
+		selection.clear();
+		selection.add(geoByLabel("5"));
+		layerManager.moveToFront(selection);
+		assertOrderingInGroup(6, 4, 7, 5);
 	}
 }

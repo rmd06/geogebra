@@ -38,14 +38,21 @@ public class Group {
         updateLead();
     }
 
+
     public int getMinOrder() {
-        GeoElement geo = Collections.min(geosGroup, orderComparator);
-        return geo.getOrdering();
+        return getMinByOrder().getOrdering();
+    }
+
+    public GeoElement getMinByOrder() {
+        return Collections.min(geosGroup, orderComparator);
     }
 
     public int getMaxOrder() {
-        GeoElement geo = Collections.max(geosGroup, orderComparator);
-        return geo.getOrdering();
+        return getMaxByOrder().getOrdering();
+    }
+
+    public GeoElement getMaxByOrder() {
+        return Collections.max(geosGroup, orderComparator);
     }
 
     private void updateLead() {

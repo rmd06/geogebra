@@ -1,13 +1,21 @@
 package org.geogebra.common.euclidian;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.groups.Group;
 
 public class LayersForGroup {
+	public static final Comparator<GeoElement> orderComparator = new Comparator<GeoElement>() {
+		@Override
+		public int compare(GeoElement geo1, GeoElement geo2) {
+			Integer ordering1 = geo1.getOrdering();
+			return ordering1.compareTo(geo2.getOrdering());
+		}
+	};
+
 	private final List<GeoElement> drawingOrder;
 
 	public LayersForGroup(List<GeoElement> drawingOrder) {
@@ -47,7 +55,8 @@ public class LayersForGroup {
 	}
 
 	private int firstIndexOf(Group group) {
-		return drawingOrder.indexOf(group.getGroupedGeos().get(0));
+		sortOrder();
+		return drawingOrder.indexOf(group.getMinByOrder());
 	}
 
 	/**
@@ -64,9 +73,12 @@ public class LayersForGroup {
 	}
 
 	private int lastIndexOf(Group group) {
-		ArrayList<GeoElement> geos = group.getGroupedGeos();
-		GeoElement last = geos.get(geos.size() - 1);
-		return drawingOrder.indexOf(last);
+		sortOrder();
+		return drawingOrder.indexOf(group.getMaxByOrder());
+	}
+
+	private void sortOrder() {
+		Collections.sort(drawingOrder, orderComparator);
 	}
 
 	/**
