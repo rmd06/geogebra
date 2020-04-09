@@ -2098,4 +2098,20 @@ public class GeoNumeric extends GeoElement
 	public boolean showLineProperties() {
 		return isDrawable() && !isSlider();
 	}
+
+	@Override
+	public String getLaTeXAlgebraDescription(boolean substituteNumbers, StringTemplate tpl) {
+		StringBuilder descriptionBuilder = new StringBuilder();
+		final String algebraDesc = getAlgebraDescription(tpl);
+		if (isAlgebraLabelVisible() && algebraDesc.contains("=")) {
+			descriptionBuilder.append(getAssignmentLHS(tpl)).append(tpl.getEqualsWithSpace());
+		}
+		descriptionBuilder.append(getLaTeXDescriptionRHS(substituteNumbers, tpl));
+		return descriptionBuilder.toString();
+	}
+
+	@Override
+	public String getLaTeXDescriptionRHS(boolean substituteNumbers, StringTemplate tpl) {
+		return getFormulaString(tpl, substituteNumbers);
+	}
 }

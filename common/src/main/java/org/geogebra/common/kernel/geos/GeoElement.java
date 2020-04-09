@@ -4306,7 +4306,7 @@ public abstract class GeoElement extends ConstructionElement
 	 * @return string used to render a LaTeX form of the geo's algebra
 	 *         description.
 	 */
-	public final String getLaTeXAlgebraDescription(
+	public String getLaTeXAlgebraDescription(
 			final boolean substituteNumbers,
 			StringTemplate tpl) {
 
@@ -4321,7 +4321,7 @@ public abstract class GeoElement extends ConstructionElement
 	 *            template
 	 * @return LaTeX description without LHS
 	 */
-	public final String getLaTeXDescriptionRHS(final boolean substituteNumbers,
+	public String getLaTeXDescriptionRHS(final boolean substituteNumbers,
 			StringTemplate tpl) {
 		return getLaTeXAlgebraDescription(this, substituteNumbers, tpl, false);
 	}
