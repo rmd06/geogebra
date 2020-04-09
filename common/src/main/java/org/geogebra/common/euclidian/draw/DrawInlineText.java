@@ -225,31 +225,12 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 
 	@Override
 	public void fromPoints(ArrayList<GPoint2D> points) {
-		double newAngle = Math.atan2(points.get(1).getY() - points.get(0).getY(),
-				points.get(1).getX() - points.get(0).getX());
-
-		double newWidth = Math.max(GeoInlineText.DEFAULT_WIDTH,
-				points.get(1).distance(points.get(0)));
-
-		double newHeight = points.get(2).distance(points.get(0));
-
-		if (newHeight < text.getMinHeight()) {
-			return;
-		}
-
-		text.setWidth(newWidth);
-		text.setHeight(newHeight);
-		text.setAngle(newAngle);
-		text.setLocation(new GPoint2D(
-						view.toRealWorldCoordX(points.get(0).getX()),
-						view.toRealWorldCoordY(points.get(0).getY())
-				)
-		);
+		rectangle.fromPoints(points);
 	}
 
 	@Override
 	protected List<GPoint2D> toPoints() {
-		return rectangle.getCorners();
+		return rectangle.toPoints();
 	}
 
 	/**

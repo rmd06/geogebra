@@ -411,7 +411,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	private SnapController snapController = new SnapController();
 	private ArrayList<GeoElement> splitPartsToRemove = new ArrayList<>();
 
-	private GeoInlineText lastInlineText;
+	private GeoInline lastInline;
 
 	/**
 	 * state for selection tool over press/release
@@ -9918,25 +9918,26 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		return draggingOccured && draggingBeyondThreshold;
 	}
 
-	private boolean handleInlineTextHit(AbstractEvent event) {
+	private boolean handleInlineHit(AbstractEvent event) {
 		if (!moveMode(mode) || app.isRightClick(event) || view.getHits().isEmpty()) {
-			lastInlineText = null;
+			lastInline = null;
 			return false;
 		}
 
 		GeoElement topGeo = view.getHits().get(view.getHits().size() - 1);
 
-		if (topGeo == lastInlineText && !draggingOccured) {
+		if (topGeo == lastInline && !draggingOccured) {
 			showDynamicStylebar();
-			((DrawInlineText) view.getDrawableFor(topGeo)).toForeground(mouseLoc.x, mouseLoc.y);
+			((DrawMedia) view.getDrawableFor(topGeo)).toForeground(mouseLoc.x, mouseLoc.y);
 
 			// Fix weird multiselect bug.
 			setResizedShape(null);
 
 			return true;
 		} else if (topGeo instanceof GeoInlineText) {
-			lastInlineText = (GeoInlineText) topGeo;
-			DrawInlineText drInlineText = ((DrawInlineText) view.getDrawableFor(lastInlineText));
+			lastInline = (GeoInline) topGeo;
+
+			DrawInlineText drInlineText = ((DrawInlineText) view.getDrawableFor(lastInline));
 			String hyperlinkURL = drInlineText.urlByCoordinate(mouseLoc.x, mouseLoc.y);
 			if (!StringUtil.emptyOrZero(hyperlinkURL) && !draggingOccured) {
 				showDynamicStylebar();
@@ -9944,8 +9945,10 @@ public abstract class EuclidianController implements SpecialPointsListener {
 				app.showURLinBrowser(hyperlinkURL);
 				return true;
 			}
+		} else if (topGeo instanceof GeoInline) {
+			lastInline = (GeoInline) topGeo;
 		} else {
-			lastInlineText = null;
+			lastInline = null;
 		}
 
 		return false;
@@ -9958,7 +9961,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 *            pointer event
 	 */
 	public void wrapMouseReleased(AbstractEvent event) {
-		if (handleInlineTextHit(event)) {
+		if (handleInlineHit(event)) {
 			return;
 		}
 

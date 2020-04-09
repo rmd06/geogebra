@@ -12,6 +12,9 @@ import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFormula;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DrawFormula extends Drawable implements DrawMedia {
 
 	private final TransformableRectangle rectangle;
@@ -83,8 +86,18 @@ public class DrawFormula extends Drawable implements DrawMedia {
 	}
 
 	@Override
-	public void toForeground(int i, int i1) {
+	public void toForeground(int x, int y) {
 		update(); // TODO this just shows bounding box; start editing instead
 		view.getApplication().storeUndoInfo();
+	}
+
+	@Override
+	public void fromPoints(ArrayList<GPoint2D> points) {
+		rectangle.fromPoints(points);
+	}
+
+	@Override
+	protected List<GPoint2D> toPoints() {
+		return rectangle.toPoints();
 	}
 }

@@ -1,5 +1,6 @@
 package org.geogebra.common.euclidian.draw;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,8 +101,31 @@ public class TransformableRectangle {
 				Math.min(corner2.getY(), corner3.getY()));
 	}
 
-	public List<GPoint2D> getCorners() {
+	public List<GPoint2D> toPoints() {
 		return Arrays.asList(corner0, corner1, corner3);
+	}
+
+	public void fromPoints(ArrayList<GPoint2D> points) {
+		double newAngle = Math.atan2(points.get(1).getY() - points.get(0).getY(),
+				points.get(1).getX() - points.get(0).getX());
+
+		double newWidth = Math.max(GeoInlineText.DEFAULT_WIDTH,
+				points.get(1).distance(points.get(0)));
+
+		double newHeight = points.get(2).distance(points.get(0));
+
+		if (newHeight < geo.getMinHeight()) {
+			return;
+		}
+
+		geo.setWidth(newWidth);
+		geo.setHeight(newHeight);
+		geo.setAngle(newAngle);
+		geo.setLocation(new GPoint2D(
+						view.toRealWorldCoordX(points.get(0).getX()),
+						view.toRealWorldCoordY(points.get(0).getY())
+				)
+		);
 	}
 
 	/**
