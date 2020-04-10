@@ -299,6 +299,10 @@ public class Colors {
 	}
 
 	public static Color decode(String string) throws NumberFormatException {
+		if (string == null || string.isEmpty()) {
+			return null;
+		}
+
 		int val = Integer.decode(string);
 		return GRAPHICS_FACTORY.createColor(
 				(val >> 16) & 0xFF,

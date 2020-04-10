@@ -11,10 +11,10 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.draw.DrawFormula;
 import org.geogebra.common.euclidian.inline.InlineFormulaController;
 import org.geogebra.common.kernel.geos.GeoFormula;
-import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
 import org.geogebra.web.html5.awt.GGraphics2DW;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.html5.main.DrawEquationW;
 
 public class InlineFormulaControllerW implements InlineFormulaController {
 
@@ -130,12 +130,9 @@ public class InlineFormulaControllerW implements InlineFormulaController {
 		if (!mathFieldEditor.isVisible()) {
 			g2.saveTransform();
 			g2.transform(transform);
-			g2.setColor(formula.getObjectColor());
-			GColor objectColor = formula.getObjectColor();
-			ColorW color = new ColorW(objectColor.getRed(), objectColor.getGreen(),
-					objectColor.getBlue());
+
 			mathFieldEditor.getMathField().paint(((GGraphics2DW) g2).getContext(), DrawFormula.PADDING,
-					DrawFormula.PADDING, color, null);
+					DrawFormula.PADDING);
 			g2.restoreTransform();
 		}
 	}
@@ -143,5 +140,11 @@ public class InlineFormulaControllerW implements InlineFormulaController {
 	@Override
 	public void updateContent(String content) {
 		mathFieldEditor.setText(content);
+	}
+
+	@Override
+	public void setColor(GColor objectColor) {
+		ColorW color = DrawEquationW.convertColorW(objectColor);
+		mathFieldEditor.getMathField().setForegroundColor(color);
 	}
 }

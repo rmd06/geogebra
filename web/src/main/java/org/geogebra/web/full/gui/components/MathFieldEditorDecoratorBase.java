@@ -1,10 +1,10 @@
 package org.geogebra.web.full.gui.components;
 
 import org.geogebra.common.awt.GColor;
-import org.geogebra.common.util.StringUtil;
 
 import com.google.gwt.dom.client.Style;
 import com.himamis.retex.editor.web.MathFieldW;
+import org.geogebra.web.html5.main.DrawEquationW;
 
 public abstract class MathFieldEditorDecoratorBase implements MathFieldEditorDecorator {
 	protected static final int PADDING_LEFT = 2;
@@ -28,12 +28,12 @@ public abstract class MathFieldEditorDecoratorBase implements MathFieldEditorDec
 	 * @param backgroundColor {@link GColor}
 	 */
 	protected void setBackgroundColor(GColor backgroundColor) {
-		GColor color = backgroundColor != null
-				? backgroundColor
-				: GColor.WHITE;
-		String cssColor = StringUtil.toHtmlColor(color);
-		style.setBackgroundColor(cssColor);
-		mathField.setBackgroundCssColor(cssColor);
+		if (backgroundColor != null) {
+			style.setBackgroundColor(backgroundColor.toString());
+		} else {
+			style.setBackgroundColor(GColor.WHITE.toString());
+		}
+		mathField.setBackgroundColor(DrawEquationW.convertColorW(backgroundColor));
 	}
 
 	/**
@@ -42,8 +42,7 @@ public abstract class MathFieldEditorDecoratorBase implements MathFieldEditorDec
 	 * @param foregroundColor {@link GColor}
 	 */
 	protected void setForegroundColor(GColor foregroundColor) {
-		mathField
-				.setForegroundCssColor(StringUtil.toHtmlColor(foregroundColor));
+		mathField.setForegroundColor(DrawEquationW.convertColorW(foregroundColor));
 	}
 
 	/**

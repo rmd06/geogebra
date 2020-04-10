@@ -53,6 +53,7 @@ public class DrawFormula extends Drawable implements DrawMedia {
 			formulaController.setHeight((int) (height - 2 * PADDING));
 			formulaController.setWidth((int) (width - 2 * PADDING));
 			formulaController.setAngle(angle);
+			formulaController.setColor(geo.getObjectColor());
 			formulaController.updateContent(formula.getContent());
 		}
 	}

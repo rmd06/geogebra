@@ -51,7 +51,6 @@ import com.himamis.retex.renderer.desktop.graphics.ColorD;
 import com.himamis.retex.renderer.desktop.graphics.Graphics2DD;
 import com.himamis.retex.renderer.share.Colors;
 import com.himamis.retex.renderer.share.platform.graphics.Color;
-import com.himamis.retex.renderer.share.platform.graphics.HasForegroundColor;
 import com.himamis.retex.renderer.share.platform.graphics.Icon;
 
 public class IconHelper {
@@ -60,19 +59,11 @@ public class IconHelper {
 		return new javax.swing.Icon() {
 
 			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				final Component component = c;
+			public void paintIcon(final Component component, Graphics g, int x, int y) {
 				final Graphics2DD g2d = new Graphics2DD((Graphics2D) g);
-				icon.paintIcon(new HasForegroundColor() {
-
-					@Override
-					public Color getForegroundColor() {
-						if (component != null) {
-							return new ColorD(component.getForeground());
-						}
-						return Colors.BLACK;
-					}
-				}, g2d, x, y);
+				final Color fgColor = component != null
+						? new ColorD(component.getForeground()) : Colors.BLACK;
+				icon.paintIcon(fgColor, g2d, x, y);
 			}
 
 			@Override

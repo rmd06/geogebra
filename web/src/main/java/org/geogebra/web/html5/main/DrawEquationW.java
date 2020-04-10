@@ -19,7 +19,6 @@ import com.himamis.retex.renderer.share.TeXIcon;
 import com.himamis.retex.renderer.share.platform.FactoryProvider;
 import com.himamis.retex.renderer.share.platform.graphics.Color;
 import com.himamis.retex.renderer.share.platform.graphics.Graphics2DInterface;
-import com.himamis.retex.renderer.share.platform.graphics.HasForegroundColor;
 import com.himamis.retex.renderer.share.platform.graphics.Image;
 import com.himamis.retex.renderer.web.DrawingFinishedCallback;
 import com.himamis.retex.renderer.web.FactoryProviderGWT;
@@ -58,15 +57,8 @@ public class DrawEquationW extends DrawEquation {
 				}
 			}
 		});
-		icon.paintIcon(new HasForegroundColor() {
-			@Override
-			public Color getForegroundColor() {
-				return FactoryProvider.getInstance().getGraphicsFactory()
-						.createColor(fgColor.getRed(), fgColor.getGreen(),
-								fgColor.getBlue());
-			}
-		}, g3, x, y);
-		((GGraphics2DW) g2).updateCanvasColor();
+		icon.paintIcon(convertColor(fgColor), g3, x, y);
+		g2.updateCanvasColor();
 		g3.maybeNotifyDrawingFinishedCallback(false);
 		return new GDimensionW(icon.getIconWidth(), icon.getIconHeight());
 
@@ -183,14 +175,7 @@ public class DrawEquationW extends DrawEquation {
 		// c.getElement().getStyle().setMargin(4, Unit.PX);
 		ctx.scale2(ratio, ratio);
 
-		icon.paintIcon(new HasForegroundColor() {
-			@Override
-			public Color getForegroundColor() {
-				return FactoryProvider.getInstance().getGraphicsFactory()
-						.createColor(fgColor.getRed(), fgColor.getGreen(),
-								fgColor.getBlue());
-			}
-		}, g3, 0, 0);
+		icon.paintIcon(convertColorW(fgColor), g3, 0, 0);
 		return c;
 	}
 
@@ -214,6 +199,14 @@ public class DrawEquationW extends DrawEquation {
 
 	@Override
 	public Color convertColor(GColor color) {
+		return convertColorW(color);
+	}
+
+	public static ColorW convertColorW(GColor color) {
+		if (color == null) {
+			return null;
+		}
+
 		return new ColorW(color.getRed(), color.getGreen(), color.getBlue());
 	}
 

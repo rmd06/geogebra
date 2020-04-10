@@ -51,7 +51,6 @@ package com.himamis.retex.renderer.share;
 import com.himamis.retex.renderer.share.TeXConstants.Align;
 import com.himamis.retex.renderer.share.platform.graphics.Color;
 import com.himamis.retex.renderer.share.platform.graphics.Graphics2DInterface;
-import com.himamis.retex.renderer.share.platform.graphics.HasForegroundColor;
 import com.himamis.retex.renderer.share.platform.graphics.Icon;
 import com.himamis.retex.renderer.share.platform.graphics.Insets;
 import com.himamis.retex.renderer.share.platform.graphics.RenderingHints;
@@ -255,7 +254,7 @@ public class TeXIcon implements Icon {
 	 * Paint the {@link TeXFormula} that created this icon.
 	 */
 	@Override
-	public void paintIcon(HasForegroundColor c, Graphics2DInterface g2, int x,
+	public void paintIcon(Color c, Graphics2DInterface g2, int x,
 			int y) {
 		// copy graphics settings
 		// TODO implement getRenderingHints
@@ -275,8 +274,7 @@ public class TeXIcon implements Icon {
 		if (fg != null) {
 			g2.setColor(fg);
 		} else if (c != null) {
-			g2.setColor(c.getForegroundColor()); // foreground will be used as
-													// default painting color
+			g2.setColor(c); // foreground will be used as default painting color
 		} else {
 			g2.setColor(defaultColor);
 		}

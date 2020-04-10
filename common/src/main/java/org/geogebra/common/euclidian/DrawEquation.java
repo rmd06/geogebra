@@ -20,7 +20,6 @@ import com.himamis.retex.renderer.share.TeXFormula;
 import com.himamis.retex.renderer.share.TeXIcon;
 import com.himamis.retex.renderer.share.platform.graphics.Color;
 import com.himamis.retex.renderer.share.platform.graphics.Graphics2DInterface;
-import com.himamis.retex.renderer.share.platform.graphics.HasForegroundColor;
 import com.himamis.retex.renderer.share.platform.graphics.Image;
 import com.himamis.retex.renderer.share.platform.graphics.Insets;
 
@@ -133,16 +132,7 @@ public abstract class DrawEquation implements DrawEquationI {
 			TeXIcon icon = createIcon(text, fgColor, font, style, maxWidth,
 					lineSpace, app);
 
-			HasForegroundColor fg = new HasForegroundColor() {
-
-				@Override
-				public Color getForegroundColor() {
-					return fgColor;
-				}
-
-			};
-
-			icon.paintIcon(fg, g2, x, y);
+			icon.paintIcon(fgColor, g2, x, y);
 
 			return AwtFactory.getPrototype().newDimension(icon.getIconWidth(),
 					icon.getIconHeight());

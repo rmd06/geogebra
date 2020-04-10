@@ -118,8 +118,8 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 	// can't be merged with instances.size because we sometimes remove an
 	// instance
 	private static int counter = 0;
-	private String foregroundCssColor = "#000000";
-	private String backgroundCssColor = "#ffffff";
+	private ColorW foregroundColor;
+	private ColorW backgroundColor;
 	private ChangeHandler changeHandler;
 	private int fixMargin = 0;
 	private int minHeight = 0;
@@ -582,11 +582,10 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 		ctx.getCanvas().setHeight(((int) Math.ceil(height * ratio)));
 		ctx.getCanvas().setWidth((int) Math.ceil(width * ratio));
 
-		paint(ctx, 0, 0, new ColorW(foregroundCssColor), backgroundCssColor);
+		paint(ctx, 0, 0);
 	}
 
-	public void paint(Context2d context, int x, int y, ColorW foregroundColor,
-			String backgroundColor) {
+	public void paint(Context2d context, int x, int y) {
 		JlmLib.draw(lastIcon, context, x, y + getMargin(lastIcon), foregroundColor,
 				backgroundColor, null, ratio);
 	}
@@ -1134,21 +1133,21 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 	/**
 	 * Sets foreground color in rgba(r, g, b, a) format.
 	 *
-	 * @param cssColor
+	 * @param foregroundColor
 	 * 			to set.
 	 */
-	public void setForegroundCssColor(String cssColor) {
-		this.foregroundCssColor = cssColor;
+	public void setForegroundColor(ColorW foregroundColor) {
+		this.foregroundColor = foregroundColor;
 	}
 
 	/**
 	 * Sets background color in #rrggbb format.
 	 *
-	 * @param cssColor
+	 * @param backgroundColor
 	 * 			to set.
 	 */
-	public void setBackgroundCssColor(String cssColor) {
-		this.backgroundCssColor = cssColor;
+	public void setBackgroundColor(ColorW backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 
 	/**
