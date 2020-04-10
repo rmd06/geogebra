@@ -3,9 +3,6 @@ package org.geogebra.web.shared.components;
 import java.util.ArrayList;
 
 import org.geogebra.common.gui.SetLabels;
-import org.geogebra.common.main.Localization;
-import org.geogebra.common.util.debug.Log;
-import org.geogebra.web.html5.gui.FastClickHandler;
 import org.geogebra.web.html5.gui.GPopupPanel;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.main.AppW;
@@ -13,21 +10,18 @@ import org.geogebra.web.html5.main.AppW;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Base dialog material design component
  */
 public class ComponentDialog extends GPopupPanel implements SetLabels {
-	private Localization localization;
 	private Label title;
 	private FlowPanel dialogContent;
 
 	public ComponentDialog(AppW app, DialogData dialogData, boolean autoHide,
 						   boolean hasScrim) {
-		super(false, true, app.getPanel(), app);
-		localization = app.getLocalization();
-		//setGlassEnabled(hasScrim);
+		super(autoHide, true, app.getPanel(), app);
+		setGlassEnabled(hasScrim);
 		this.setStyleName("dialogComponent");
 		buildDialog(dialogData);
 	}
@@ -44,7 +38,7 @@ public class ComponentDialog extends GPopupPanel implements SetLabels {
 	}
 
 	private void addTitleOfDialog(FlowPanel dialogMainPanel, String titleTransKey) {
-		title = new Label(localization.getMenu(titleTransKey));
+		title = new Label(getApplication().getLocalization().getMenu(titleTransKey));
 		title.setStyleName("dialogTitle");
 		dialogMainPanel.add(title);
 	}
@@ -58,21 +52,15 @@ public class ComponentDialog extends GPopupPanel implements SetLabels {
 	private void addButtonsOfDialog(FlowPanel dialogMainPanel, ArrayList<String> buttonTransKeys) {
 		FlowPanel dialogButtonPanel = new FlowPanel();
 		dialogButtonPanel.setStyleName("dialogBtnPanel");
+		int i = 0;
 		for (String btnTransKey : buttonTransKeys) {
+			i++;
 			StandardButton button = new StandardButton(btnTransKey, getApplication());
-			button.addFastClickHandler(new FastClickHandler() {
-				@Override
-				public void onClick(Widget source) {
+			button.setStyleName(i==1 ? "materialTextButton" : "materialContainedButton");
 
-				}
-			});
 			dialogButtonPanel.add(button);
 		}
 		dialogMainPanel.add(dialogButtonPanel);
-	}
-
-	private void addBtnAction() {
-
 	}
 
 	public void firstBtnAction() {
@@ -95,11 +83,6 @@ public class ComponentDialog extends GPopupPanel implements SetLabels {
 	public void show() {
 		super.show();
 		super.center();
-	}
-
-	@Override
-	public void hide() {
-		Log.debug("DO NOTHING");
 	}
 
 	@Override
