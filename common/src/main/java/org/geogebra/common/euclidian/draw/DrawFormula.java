@@ -17,18 +17,22 @@ import java.util.List;
 
 public class DrawFormula extends Drawable implements DrawMedia {
 
+	public static final int PADDING = 8;
+
 	private final TransformableRectangle rectangle;
 
+	private final GeoFormula formula;
 	private final InlineFormulaController formulaController;
 
 	/**
 	 * @param ev view
-	 * @param equation equation
+	 * @param formula formula
 	 */
-	public DrawFormula(EuclidianView ev, GeoFormula equation) {
-		super(ev, equation);
-		this.rectangle = new TransformableRectangle(view, equation);
-		this.formulaController = ev.getApplication().createInlineFormulaController(ev, equation);
+	public DrawFormula(EuclidianView ev, GeoFormula formula) {
+		super(ev, formula);
+		this.rectangle = new TransformableRectangle(view, formula);
+		this.formula = formula;
+		this.formulaController = ev.getApplication().createInlineFormulaController(ev, formula);
 		update();
 	}
 
@@ -37,6 +41,19 @@ public class DrawFormula extends Drawable implements DrawMedia {
 		updateStrokes(geo);
 		labelDesc = geo.toValueString(StringTemplate.defaultTemplate);
 		rectangle.updateSelfAndBoundingBox();
+
+		GPoint2D point = formula.getLocation();
+		if (formulaController != null && point != null) {
+			double angle = formula.getAngle();
+			double width = formula.getWidth();
+			double height = formula.getHeight();
+
+			formulaController.setLocation(view.toScreenCoordX(point.getX()),
+					view.toScreenCoordY(point.getY()));
+			formulaController.setHeight((int) (height - 2 * PADDING));
+			formulaController.setWidth((int) (width - 2 * PADDING));
+			formulaController.setAngle(angle);
+		}
 	}
 
 	@Override
@@ -83,13 +100,17 @@ public class DrawFormula extends Drawable implements DrawMedia {
 
 	@Override
 	public void updateContent() {
-		// TODO update editor content
+		if (formulaController != null) {
+			formulaController.updateContent(formula.getContent());
+		}
 	}
 
 	@Override
 	public void toForeground(int x, int y) {
-		update(); // TODO this just shows bounding box; start editing instead
-		view.getApplication().storeUndoInfo();
+		if (formulaController != null) {
+			GPoint2D p = rectangle.getInversePoint(x - PADDING, y - PADDING);
+			formulaController.toForeground((int) p.getX(), (int) p.getY());
+		}
 	}
 
 	@Override

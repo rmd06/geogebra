@@ -50,15 +50,14 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 
 	@Override
 	public void update() {
-		GPoint2D point = text.getLocation();
-
 		rectangle.updateSelfAndBoundingBox();
 
-		double angle = text.getAngle();
-		double width = text.getWidth();
-		double height = text.getHeight();
-
+		GPoint2D point = text.getLocation();
 		if (textController != null && point != null) {
+			double angle = text.getAngle();
+			double width = text.getWidth();
+			double height = text.getHeight();
+
 			textController.setLocation(view.toScreenCoordX(point.getX()),
 					view.toScreenCoordY(point.getY()));
 			textController.setHeight((int) (height - 2 * PADDING));

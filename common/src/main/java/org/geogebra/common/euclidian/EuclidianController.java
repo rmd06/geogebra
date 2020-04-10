@@ -6309,6 +6309,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		inlineText.setLabel(null);
 		selectAndShowBoundingBox(inlineText);
 		DrawableND drawable = view.getDrawableFor(inlineText);
+		drawable.update();
 		if (drawable instanceof DrawMedia) {
 			((DrawMedia) drawable).toForeground(0, 0);
 		}
@@ -7168,8 +7169,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			}
 			tempFunction.set(movedGeoFunction);
 		} else if (movedGeoElement instanceof GeoLocusStroke
-				|| movedGeoElement instanceof GeoInlineText
-				|| movedGeoElement instanceof GeoFormula) {
+				|| movedGeoElement instanceof GeoInline) {
 			if (translationVec == null) {
 				translationVec = new Coords(2);
 			}
@@ -9778,8 +9778,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		if (selectedGeos.size() == 1) {
 			GeoElement geoElement = selectedGeos.get(0);
 			return geoElement.isGeoSegment()
-					|| geoElement instanceof GeoInlineText
-					|| geoElement instanceof GeoFormula
+					|| geoElement instanceof GeoInline
 					|| (geoElement.isGeoImage() && !geoElement.isLocked() && crop);
 		}
 		return false;
