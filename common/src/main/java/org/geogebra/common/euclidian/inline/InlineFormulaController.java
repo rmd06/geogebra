@@ -1,5 +1,8 @@
 package org.geogebra.common.euclidian.inline;
 
+import org.geogebra.common.awt.GAffineTransform;
+import org.geogebra.common.awt.GGraphics2D;
+
 public interface InlineFormulaController {
 
 	void setLocation(int x, int y);
@@ -13,6 +16,8 @@ public interface InlineFormulaController {
 	void toForeground(int x, int y);
 
 	void toBackground();
+
+	void draw(GGraphics2D g2, GAffineTransform transform);
 
 	void updateContent(String content);
 }

@@ -6,7 +6,6 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.euclidian.inline.InlineTextController;
-import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.geos.GProperty;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.move.ggtapi.models.json.JSONArray;
@@ -191,9 +190,7 @@ public class InlineTextControllerW implements InlineTextController {
 			g2.fillRect(0, 0, (int) geo.getWidth(), (int) geo.getHeight());
 		}
 		if (editor.getWidget().getElement().hasClassName(INVISIBLE)) {
-			GAffineTransform res = AwtFactory.getTranslateInstance(DrawInlineText.PADDING,
-					DrawInlineText.PADDING);
-			g2.transform(res);
+			g2.translate(DrawInlineText.PADDING, DrawInlineText.PADDING);
 			g2.setColor(GColor.BLACK);
 			editor.draw(((GGraphics2DWI) g2).getContext());
 		}

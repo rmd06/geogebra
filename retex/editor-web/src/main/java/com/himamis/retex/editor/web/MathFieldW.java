@@ -582,10 +582,13 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 		ctx.getCanvas().setHeight(((int) Math.ceil(height * ratio)));
 		ctx.getCanvas().setWidth((int) Math.ceil(width * ratio));
 
-		ctx.setFillStyle(backgroundCssColor);
-		ctx.fillRect(0, 0, ctx.getCanvas().getWidth(), height);
-		JlmLib.draw(lastIcon, ctx, 0, getMargin(lastIcon), new ColorW(foregroundCssColor),
-				backgroundCssColor, null, ratio);
+		paint(ctx, 0, 0, new ColorW(foregroundCssColor), backgroundCssColor);
+	}
+
+	public void paint(Context2d context, int x, int y, ColorW foregroundColor,
+			String backgroundColor) {
+		JlmLib.draw(lastIcon, context, x, y + getMargin(lastIcon), foregroundColor,
+				backgroundColor, null, ratio);
 	}
 
 	private boolean isEdited() {
@@ -719,8 +722,6 @@ public class MathFieldW implements MathField, IsWidget, MathFieldAsync, BlurHand
 			// last repaint with no cursor
 			CursorBox.setBlink(false);
 			repaintWeb();
-			this.lastIcon = null;
-
 		}
 		this.focused = focus;
 	}

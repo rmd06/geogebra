@@ -4,9 +4,16 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.himamis.retex.editor.share.event.MathFieldListener;
 import com.himamis.retex.editor.share.model.MathSequence;
+import com.himamis.retex.renderer.web.graphics.ColorW;
+import org.geogebra.common.awt.GAffineTransform;
+import org.geogebra.common.awt.GColor;
+import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.euclidian.draw.DrawFormula;
 import org.geogebra.common.euclidian.inline.InlineFormulaController;
+import org.geogebra.common.kernel.geos.GeoFormula;
+import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
+import org.geogebra.web.html5.awt.GGraphics2DW;
 import org.geogebra.web.html5.main.AppW;
 
 public class InlineFormulaControllerW implements InlineFormulaController {
@@ -59,11 +66,13 @@ public class InlineFormulaControllerW implements InlineFormulaController {
 		}
 	}
 
+	private GeoFormula formula;
 	private MathFieldEditor mathFieldEditor;
 
 	private Style style;
 
-	public InlineFormulaControllerW(AppW app,  AbsolutePanel parent) {
+	public InlineFormulaControllerW(GeoFormula formula, AppW app, AbsolutePanel parent) {
+		this.formula = formula;
 		this.mathFieldEditor = new MathFieldEditor(app, new FormulaMathFieldListener());
 
 		mathFieldEditor.attach(parent);
@@ -102,11 +111,33 @@ public class InlineFormulaControllerW implements InlineFormulaController {
 	public void toForeground(int x, int y) {
 		mathFieldEditor.setVisible(true);
 		mathFieldEditor.requestFocus();
+		mathFieldEditor.getMathField().getInternal().onPointerUp(x, y);
 	}
 
 	@Override
 	public void toBackground() {
+		if (!formula.getContent().equals(mathFieldEditor.getText())) {
+			formula.setContent(mathFieldEditor.getText());
+			formula.updateRepaint();
+			formula.getKernel().storeUndoInfo();
+		}
+
 		mathFieldEditor.setVisible(false);
+	}
+
+	@Override
+	public void draw(GGraphics2D g2, GAffineTransform transform) {
+		if (!mathFieldEditor.isVisible()) {
+			g2.saveTransform();
+			g2.transform(transform);
+			g2.setColor(formula.getObjectColor());
+			GColor objectColor = formula.getObjectColor();
+			ColorW color = new ColorW(objectColor.getRed(), objectColor.getGreen(),
+					objectColor.getBlue());
+			mathFieldEditor.getMathField().paint(((GGraphics2DW) g2).getContext(), DrawFormula.PADDING,
+					DrawFormula.PADDING, color, null);
+			g2.restoreTransform();
+		}
 	}
 
 	@Override
