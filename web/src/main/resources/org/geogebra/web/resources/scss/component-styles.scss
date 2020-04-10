@@ -291,7 +291,7 @@
 
         .dialogMainPanel {
             padding: 20px 0px 0px 24px;
-            height: 100%;
+            height: calc(100% - 20px);
 
             .dialogTitle {
                 height: 20px;
@@ -301,9 +301,10 @@
             }
 
             .dialogContent {
-                // 112px = 20px top padding + 20px title + 20px margin + 52px button panel
-                height: calc(100% - 112px);
+                // 112px = 20px title + 20px margin + 52px button panel
+                height: calc(100% - 92px);
                 background-color: aliceblue;
+                padding-right: 24px;
             }
 
             .dialogBtnPanel {
