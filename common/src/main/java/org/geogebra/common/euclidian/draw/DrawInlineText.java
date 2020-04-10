@@ -11,7 +11,7 @@ import org.geogebra.common.euclidian.EuclidianBoundingBoxHandler;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.RemoveNeeded;
 import org.geogebra.common.euclidian.RotatableBoundingBox;
-import org.geogebra.common.euclidian.text.InlineTextController;
+import org.geogebra.common.euclidian.inline.InlineTextController;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 
@@ -23,9 +23,9 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 	public static final int PADDING = 8;
 
 	private GeoInlineText text;
-	private InlineTextController textController;
+	private final InlineTextController textController;
 
-	private TransformableRectangle rectangle;
+	private final TransformableRectangle rectangle;
 
 	/**
 	 * Create a new DrawInlineText instance.
@@ -37,7 +37,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		super(view, text);
 		rectangle = new TransformableRectangle(view, text);
 		this.text = text;
-		this.textController = view.createInlineTextController(text);
+		this.textController = view.getApplication().createInlineTextController(view, text);
 		createEditor();
 		update();
 	}

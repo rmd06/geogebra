@@ -39,7 +39,8 @@ import org.geogebra.common.euclidian.draw.DrawRay;
 import org.geogebra.common.euclidian.draw.DrawSegment;
 import org.geogebra.common.euclidian.draw.DrawVector;
 import org.geogebra.common.euclidian.event.PointerEventType;
-import org.geogebra.common.euclidian.text.InlineTextController;
+import org.geogebra.common.euclidian.inline.InlineFormulaController;
+import org.geogebra.common.euclidian.inline.InlineTextController;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.factories.FormatFactory;
 import org.geogebra.common.gui.SetLabels;
@@ -55,6 +56,7 @@ import org.geogebra.common.kernel.arithmetic.NumberValue;
 import org.geogebra.common.kernel.geos.GProperty;
 import org.geogebra.common.kernel.geos.GeoCurveCartesian;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoFormula;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
@@ -6601,19 +6603,6 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (euclidianController.isMultiSelection()) {
 			euclidianController.showDynamicStylebar();
 		}
-	}
-
-	/**
-	 * Create an inline text controller iff the view supports inline text
-	 * editing.
-	 *
-	 * @param geo
-	 *            inline text
-	 *
-	 * @return an implementation of the text controller.
-	 */
-	public InlineTextController createInlineTextController(GeoInlineText geo) {
-		return null;
 	}
 
 	/**

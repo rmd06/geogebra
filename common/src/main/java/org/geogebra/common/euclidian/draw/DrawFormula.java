@@ -1,6 +1,5 @@
 package org.geogebra.common.euclidian.draw;
 
-import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle;
@@ -8,6 +7,7 @@ import org.geogebra.common.euclidian.Drawable;
 import org.geogebra.common.euclidian.EuclidianBoundingBoxHandler;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.RotatableBoundingBox;
+import org.geogebra.common.euclidian.inline.InlineFormulaController;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFormula;
@@ -18,7 +18,8 @@ import java.util.List;
 public class DrawFormula extends Drawable implements DrawMedia {
 
 	private final TransformableRectangle rectangle;
-	private GFont textFont;
+
+	private final InlineFormulaController formulaController;
 
 	/**
 	 * @param ev view
@@ -26,8 +27,8 @@ public class DrawFormula extends Drawable implements DrawMedia {
 	 */
 	public DrawFormula(EuclidianView ev, GeoFormula equation) {
 		super(ev, equation);
-		textFont = ev.getFont();
 		this.rectangle = new TransformableRectangle(view, equation);
+		this.formulaController = ev.getApplication().createInlineFormulaController(ev, equation);
 		update();
 	}
 
@@ -41,11 +42,11 @@ public class DrawFormula extends Drawable implements DrawMedia {
 	@Override
 	public void draw(GGraphics2D g2) {
 		g2.setPaint(geo.getObjectColor());
-		g2.setFont(textFont);
+		g2.setFont(view.getFont());
 		g2.setStroke(objStroke); // needed eg for \sqrt
 		g2.saveTransform();
 		g2.transform(rectangle.getDirectTransform());
-		drawMultilineLaTeX(g2, textFont, geo.getObjectColor(),
+		drawMultilineLaTeX(g2, view.getFont(), geo.getObjectColor(),
 				view.getBackgroundCommon());
 		g2.restoreTransform();
 	}
