@@ -12,4 +12,9 @@ public interface DrawMedia {
 	 * @param y y mouse coordinates in pixels
 	 */
 	void toForeground(int x, int y);
+
+	/**
+	 * Send this to background
+	 */
+	void toBackground();
 }

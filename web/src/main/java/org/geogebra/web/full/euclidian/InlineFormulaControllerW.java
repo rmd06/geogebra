@@ -4,8 +4,8 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.himamis.retex.editor.share.event.MathFieldListener;
 import com.himamis.retex.editor.share.model.MathSequence;
+import org.geogebra.common.euclidian.draw.DrawFormula;
 import org.geogebra.common.euclidian.inline.InlineFormulaController;
-import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.gui.components.MathFieldEditor;
 import org.geogebra.web.html5.main.AppW;
 
@@ -65,11 +65,16 @@ public class InlineFormulaControllerW implements InlineFormulaController {
 
 	public InlineFormulaControllerW(AppW app,  AbsolutePanel parent) {
 		this.mathFieldEditor = new MathFieldEditor(app, new FormulaMathFieldListener());
-		this.style = mathFieldEditor.getStyle();
 
 		mathFieldEditor.attach(parent);
+		mathFieldEditor.addStyleName("mowWidget");
+
+		this.style = mathFieldEditor.getStyle();
 		style.setPosition(Style.Position.ABSOLUTE);
-		style.setZIndex(51);
+		String origin = "-" + DrawFormula.PADDING + "px ";
+		style.setProperty("transformOrigin", origin + origin);
+		style.setProperty("boxSizing", "border-box");
+		style.setMargin(8, Style.Unit.PX);
 	}
 
 	@Override
@@ -95,8 +100,13 @@ public class InlineFormulaControllerW implements InlineFormulaController {
 
 	@Override
 	public void toForeground(int x, int y) {
-		Log.debug("foregrounding");
+		mathFieldEditor.setVisible(true);
 		mathFieldEditor.requestFocus();
+	}
+
+	@Override
+	public void toBackground() {
+		mathFieldEditor.setVisible(false);
 	}
 
 	@Override

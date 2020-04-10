@@ -76,9 +76,7 @@ public class DrawInlineText extends Drawable implements RemoveNeeded, DrawWidget
 		}
 	}
 
-	/**
-	 * Send this to background
-	 */
+	@Override
 	public void toBackground() {
 		if (textController != null) {
 			textController.toBackground();

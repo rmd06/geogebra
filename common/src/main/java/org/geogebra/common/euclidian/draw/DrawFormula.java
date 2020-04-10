@@ -53,6 +53,7 @@ public class DrawFormula extends Drawable implements DrawMedia {
 			formulaController.setHeight((int) (height - 2 * PADDING));
 			formulaController.setWidth((int) (width - 2 * PADDING));
 			formulaController.setAngle(angle);
+			formulaController.updateContent(formula.getContent());
 		}
 	}
 
@@ -63,6 +64,7 @@ public class DrawFormula extends Drawable implements DrawMedia {
 		g2.setStroke(objStroke); // needed eg for \sqrt
 		g2.saveTransform();
 		g2.transform(rectangle.getDirectTransform());
+		g2.translate(PADDING, PADDING);
 		drawMultilineLaTeX(g2, view.getFont(), geo.getObjectColor(),
 				view.getBackgroundCommon());
 		g2.restoreTransform();
@@ -110,6 +112,13 @@ public class DrawFormula extends Drawable implements DrawMedia {
 		if (formulaController != null) {
 			GPoint2D p = rectangle.getInversePoint(x - PADDING, y - PADDING);
 			formulaController.toForeground((int) p.getX(), (int) p.getY());
+		}
+	}
+
+	@Override
+	public void toBackground() {
+		if (formulaController != null) {
+			formulaController.toBackground();
 		}
 	}
 

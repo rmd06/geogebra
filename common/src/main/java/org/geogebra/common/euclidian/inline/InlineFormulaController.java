@@ -12,5 +12,7 @@ public interface InlineFormulaController {
 
 	void toForeground(int x, int y);
 
+	void toBackground();
+
 	void updateContent(String content);
 }
