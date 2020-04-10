@@ -69,8 +69,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.plaf.basic.BasicListUI;
-
 public class DialogManagerW extends DialogManager
 		implements LoadingApplication {
 

@@ -2,8 +2,6 @@ package org.geogebra.web.shared.components;
 
 import java.util.ArrayList;
 
-import org.geogebra.keyboard.base.Button;
-
 /**
  * object holding the settings of the dialog
  */
