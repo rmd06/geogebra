@@ -334,8 +334,8 @@ public class DialogManagerW extends DialogManager
 		expImgDialog.center();
 		expImgDialog.show();*/
 		ComponentDialog dialogComponent = new ComponentDialog((AppW) app,
-				new DialogData("title", new ArrayList<String>(Arrays
-						.asList("btn1", "btn2", "btn3"))), true, true);
+				new DialogData("Dialog Title", new ArrayList<String>(Arrays
+						.asList("CANCEL", "OK", "SELECT"))), true, true);
 		dialogComponent.show();
 	}
 

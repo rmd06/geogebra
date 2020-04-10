@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.main.Localization;
+import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.gui.FastClickHandler;
 import org.geogebra.web.html5.gui.GPopupPanel;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
@@ -24,9 +25,9 @@ public class ComponentDialog extends GPopupPanel implements SetLabels {
 
 	public ComponentDialog(AppW app, DialogData dialogData, boolean autoHide,
 						   boolean hasScrim) {
-		super(autoHide, app.getPanel(), app);
+		super(false, true, app.getPanel(), app);
 		localization = app.getLocalization();
-		setGlassEnabled(hasScrim);
+		//setGlassEnabled(hasScrim);
 		this.setStyleName("dialogComponent");
 		buildDialog(dialogData);
 	}
@@ -34,8 +35,6 @@ public class ComponentDialog extends GPopupPanel implements SetLabels {
 	private void  buildDialog(DialogData dialogData) {
 		FlowPanel dialogMainPanel = new FlowPanel();
 		dialogMainPanel.addStyleName("dialogMainPanel");
-		dialogMainPanel.setHeight("200px");
-		dialogMainPanel.setWidth("500px");
 
 		addTitleOfDialog(dialogMainPanel, dialogData.getTitleTransKey());
 		createEmptyDialogContent(dialogMainPanel);
@@ -96,6 +95,11 @@ public class ComponentDialog extends GPopupPanel implements SetLabels {
 	public void show() {
 		super.show();
 		super.center();
+	}
+
+	@Override
+	public void hide() {
+		Log.debug("DO NOTHING");
 	}
 
 	@Override
